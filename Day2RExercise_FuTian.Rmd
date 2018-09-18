@@ -272,20 +272,27 @@ for (i in unique(gapminder$year)) {
 ```
 
 ```{r}
-for (i in unique(gapminder$continent)) {
-  if (i == "Americas") {
-    plot(gapminder$log_lifeExp[gapminder$country=="Canada"] ~ gapminder$log_gdpPercap[gapminder$country=="Canada"],
-     main="North America",
-     xlab = "gdp per capita", ylab = "life expectancy")
-    plot(gapminder$log_lifeExp[gapminder$continent==i &
-                                   gapminder$country!="Canada"] ~ gapminder$log_gdpPercap[gapminder$continent==i &                                                                    gapminder$country!="Canada"],
-     main="South America",
-     xlab = "gdp per capita", ylab = "life expectancy")
-  } else {
-    plot(gapminder$log_lifeExp[gapminder$continent==i] ~ gapminder$log_gdpPercap[gapminder$continent==i],
+count <- 1:nrow(gapminder)
+
+for (i in count) {
+  if (gapminder[i, "continent"]=="Americas"){
+    if (gapminder[i, "country"]=="Canada" |
+        gapminder[i, "country"]=="Mexico" |
+        gapminder[i, "country"]=="United States") {
+      gapminder[i, "newContinent"] <- "NorthAmerica"
+    } else {
+      gapminder[i, "newContinent"] <- "SouthAmerica"
+    }
+  } else{
+    gapminder[i, "newContinent"] <- gapminder[i, "continent"]
+  }
+}
+
+for (i in unique(gapminder$newContinent)) {
+  plot(gapminder$log_lifeExp[gapminder$newContinent==i] 
+       ~ gapminder$log_gdpPercap[gapminder$newContinent==i],
          main=i,
          xlab = "gdp per capita", ylab = "life expectancy")
-  }
 }
 
 plot(gapminder$log_lifeExp[gapminder$continent=="Americas"] ~ gapminder$log_gdpPercap[gapminder$continent=="Americas"],
