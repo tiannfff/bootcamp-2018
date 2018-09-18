@@ -174,3 +174,122 @@ report_sum(gapminder, "lifeExp", "Asia")
 ```
 
 
+
+
+## exercises
+
+```{r}
+if (any(gapminder$year == 2002)) {
+  print(paste0("there is 2002"))
+} else {
+  print(paste0("there is no 2002"))
+}
+if (any(gapminder$year == 2012)) {
+  print(paste0("there is 2012"))
+} else {
+  print(paste0("there is no 2012"))
+}
+```
+
+```{r}
+whole_mean <- mean(gapminder$pop)
+for (i in unique(gapminder$country)) {
+  indiv_mean = mean(gapminder$pop[gapminder$country == i])
+  if (indiv_mean < whole_mean) {
+    mean_le <- mean(gapminder$lifeExp[gapminder$country == i])
+    cat(paste0("\nMean life expectancy in ", i, " is ", mean_le))
+  }
+}
+```
+
+```{r}
+for (i in unique(gapminder$continent)) {
+  mean_le <- mean(gapminder$lifeExp[gapminder$continent == i])
+  if (mean_le < 50) {
+    print(paste("Mean life expectancy in", i, "< 50"))
+  }
+  if (mean_le > 70) {
+    print(paste("Mean life expectancy in", i, "> 70"))
+  }
+  if ((mean_le > 50) & (mean_le < 70)) {
+    print(paste("Mean life expectancy in", i, "is between 50 and 70"))
+  }
+}
+```
+
+```{r}
+report_name_class <-
+  function(df) {
+    for (i in names(df)) {
+      class <- class(df[[i]])
+      print(paste("column name:", i, ";",
+                "class type:", class))
+    }
+  }
+report_name_class(gapminder)
+```
+
+```{r}
+report_name_class <-
+  function(df) {
+    names <- names(df)
+    for (i in 1:ncol(df)) {
+      name <- names[i]
+      class <- class(df[[name]])
+      print(paste("column name:", name, ";",
+                "class type:", class))
+    }
+  }
+report_name_class(gapminder)
+```
+
+```{r}
+report_mean_std <-
+  function(vector, med = FALSE) {
+    mean = mean(vector)
+    sd = sd(vector)
+    print(paste("mean is", mean, 
+                "standard deviation is", sd))
+    if (med) {
+      median = median(vector)
+      print(paste("median is", median))
+    }
+  }
+report_mean_std(c(4,5,6), TRUE)
+```
+
+```{r}
+gapminder$log_lifeExp <- log(gapminder$lifeExp)
+plot(gapminder$log_lifeExp ~ gapminder$log_gdpPercap,
+     main="log of gdp per capita and log of life expectancy",
+     xlab = "gdp per capita", ylab = "life expectancy")
+
+for (i in unique(gapminder$year)) {
+  plot(gapminder$log_lifeExp[gapminder$year==i] ~ gapminder$log_gdpPercap[gapminder$year==i],
+     main=i,
+     xlab = "gdp per capita", ylab = "life expectancy")
+}
+```
+
+```{r}
+for (i in unique(gapminder$continent)) {
+  if (i == "Americas") {
+    plot(gapminder$log_lifeExp[gapminder$country=="Canada"] ~ gapminder$log_gdpPercap[gapminder$country=="Canada"],
+     main="North America",
+     xlab = "gdp per capita", ylab = "life expectancy")
+    plot(gapminder$log_lifeExp[gapminder$continent==i &
+                                   gapminder$country!="Canada"] ~ gapminder$log_gdpPercap[gapminder$continent==i &                                                                    gapminder$country!="Canada"],
+     main="South America",
+     xlab = "gdp per capita", ylab = "life expectancy")
+  } else {
+    plot(gapminder$log_lifeExp[gapminder$continent==i] ~ gapminder$log_gdpPercap[gapminder$continent==i],
+         main=i,
+         xlab = "gdp per capita", ylab = "life expectancy")
+  }
+}
+
+plot(gapminder$log_lifeExp[gapminder$continent=="Americas"] ~ gapminder$log_gdpPercap[gapminder$continent=="Americas"],
+         main="Americas",
+         xlab = "gdp per capita", ylab = "life expectancy")
+```
+
